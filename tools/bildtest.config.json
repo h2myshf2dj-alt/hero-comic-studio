@@ -1,83 +1,183 @@
 {
- "listModels": true,
- "parallel": 3,
+ "listModels": false,
+ "parallel": 5,
  "jobs": [
   {
-   "name": "p3_Dreamshaper",
-   "model": "Dreamshaper",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p2_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p2_Dreamshaper",
-   "model": "Dreamshaper",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p3_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p3_Deliberate",
-   "model": "Deliberate",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p5_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p2_Deliberate",
-   "model": "Deliberate",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p2_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p3_ComicDiffusion",
-   "model": "Comic-Diffusion",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p3_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p2_ComicDiffusion",
-   "model": "Comic-Diffusion",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p5_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   },
   {
-   "name": "p3_stable_diffusion",
-   "model": "stable_diffusion",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p2_albedo31",
+   "model": "AlbedoBase XL 3.1",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 20,
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p2_stable_diffusion",
-   "model": "stable_diffusion",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p3_albedo31",
+   "model": "AlbedoBase XL 3.1",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 20,
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p3_AlbedoBase",
-   "model": "AlbedoBase XL (SDXL)",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p5_albedo31",
+   "model": "AlbedoBase XL 3.1",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 20,
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p2_AlbedoBase",
-   "model": "AlbedoBase XL (SDXL)",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p2_dsxl",
+   "model": "DreamShaper XL",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 8,
+   "cfg": 2,
+   "sampler": "k_dpmpp_sde",
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p3_Anything",
-   "model": "Anything Diffusion",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p3_dsxl",
+   "model": "DreamShaper XL",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 8,
+   "cfg": 2,
+   "sampler": "k_dpmpp_sde",
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p2_Anything",
-   "model": "Anything Diffusion",
-   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p5_dsxl",
+   "model": "DreamShaper XL",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
+   "steps": 8,
+   "cfg": 2,
+   "sampler": "k_dpmpp_sde",
+   "w": 768,
+   "h": 768
   },
   {
-   "name": "p3_nomodel",
-   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
-   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+   "name": "p2_krea",
+   "model": "Krea2-Turbo_fp8",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "p3_krea",
+   "model": "Krea2-Turbo_fp8",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "p5_krea",
+   "model": "Krea2-Turbo_fp8",
+   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "steps": 8,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "params": {
+    "karras": false
+   }
   }
  ]
 }
