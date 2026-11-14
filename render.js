@@ -73,11 +73,32 @@ const Render = {
         ctx.fillText("SZENE " + (i + 1), r.x + r.w / 2, r.y + r.h / 2);
       }
       if (scene && scene.bubble && scene.bubble.trim()) this.bubble(ctx, r, scene);
+      if (scene && scene.sfx && scene.sfx.trim()) this.sfx(ctx, r, scene);
       ctx.restore();
 
       ctx.lineWidth = 7; ctx.strokeStyle = "#111";
       ctx.strokeRect(r.x, r.y, r.w, r.h);
     });
+  },
+
+  // Soundeffekt: große schräge Schrift in der Ecke gegenüber der Blase
+  sfx(ctx, r, scene) {
+    const text = scene.sfx.trim().toUpperCase();
+    const pos = scene.bubblePos || "tl";
+    const top = pos[0] !== "t", left = pos[1] !== "l"; // gegenüberliegende Ecke
+    let size = Math.round(r.w * 0.2);
+    ctx.font = `${size}px Bangers, Impact, sans-serif`;
+    while (ctx.measureText(text).width > r.w * 0.6 && size > 30) { size -= 4; ctx.font = `${size}px Bangers, Impact, sans-serif`; }
+    const tw = ctx.measureText(text).width;
+    const cx = left ? r.x + 30 + tw / 2 : r.x + r.w - 30 - tw / 2;
+    const cy = top ? r.y + 30 + size / 2 : r.y + r.h - 30 - size / 2;
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(-0.12);
+    ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.lineJoin = "round";
+    ctx.lineWidth = Math.max(8, size * 0.16); ctx.strokeStyle = "#111";
+    ctx.strokeText(text, 4, 4); ctx.strokeText(text, 0, 0);
+    ctx.fillStyle = "#ffd21f"; ctx.fillText(text, 0, 0);
+    ctx.restore();
   },
 
   wrap(ctx, text, maxW) {

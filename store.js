@@ -1,7 +1,7 @@
 // Speicherung auf dem Gerät (localStorage) + Stil-Liste
 const STYLES = [
-  { id: "retro95", name: "Comic der 90er (1995)",
-    prompt: "1990s american comic book art, 1995 superhero comic style, bold black ink outlines, flat bright colors, crosshatching shading, halftone print, hand drawn" },
+  { id: "retro95", name: "US-Superhelden-Comic 1995",
+    prompt: "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn" },
   { id: "classic", name: "Klassischer US-Superhelden-Comic",
     prompt: "classic american superhero comic book art, bold black ink lines, vibrant primary colors, halftone dots, dynamic action pose, dramatic lighting" },
   { id: "modern", name: "Moderner realistischer Superhelden-Comic",

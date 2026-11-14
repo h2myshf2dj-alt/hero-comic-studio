@@ -1,5 +1,5 @@
 // Hero Comic Studio – Bedienung
-const APP_VERSION = "1.5";
+const APP_VERSION = "1.6";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -100,15 +100,20 @@ function buildSceneCards() {
     status.textContent = s.img ? "✔ Bild vorhanden" : "noch kein Bild";
     head.append(num, status);
 
-    const l1 = document.createElement("label"); l1.textContent = "Was passiert im Bild? (kurze englische Stichworte klappen am besten)";
+    const l1 = document.createElement("label"); l1.textContent = "Was passiert im Bild? (genau beschreiben, Englisch klappt am besten)";
     const ta = document.createElement("textarea"); ta.rows = 3; ta.value = s.text;
-    ta.placeholder = "z. B. blonde woman walking a husky dog in a park, sunny day";
+    ta.placeholder = "z. B. Volt punches the robot in the chest, the robot falls backwards. Side view, full bodies visible, city street at night.";
     ta.oninput = () => { s.text = ta.value; saveSoon(); };
 
     const l2 = document.createElement("label"); l2.textContent = "Text in der Blase (leer = keine Blase)";
     const inp = document.createElement("input"); inp.type = "text"; inp.value = s.bubble;
     inp.placeholder = "z. B. Was passiert mit mir?!";
     inp.oninput = () => { s.bubble = inp.value; draw(); saveSoon(); };
+
+    const l3 = document.createElement("label"); l3.textContent = "Soundeffekt (leer = keiner)";
+    const sfx = document.createElement("input"); sfx.type = "text"; sfx.value = s.sfx || "";
+    sfx.placeholder = "z. B. BAMM!"; sfx.maxLength = 14;
+    sfx.oninput = () => { s.sfx = sfx.value; draw(); saveSoon(); };
 
     const row = document.createElement("div"); row.className = "row";
     const selType = makeSelect([["speech", "Sprechblase"], ["thought", "Gedankenblase"], ["caption", "Erzähler-Kasten"]], s.bubbleType);
@@ -123,7 +128,7 @@ function buildSceneCards() {
     btn.onclick = () => generateOne(i);
     btn.disabled = state.busy;
 
-    card.append(head, l1, ta, l2, inp, row, btn);
+    card.append(head, l1, ta, l2, inp, row, l3, sfx, btn);
     box.appendChild(card);
   });
 }
@@ -141,14 +146,16 @@ function setStatus(i, text) { const el = $("status-" + i); if (el) el.textConten
 // ---------- Bilder erzeugen ----------
 function updateGenProgress(run) {
   const secs = Math.round((Date.now() - run.t0) / 1000);
-  progress(`Bilder: ${run.done} von ${run.total} fertig · ${secs} s · bitte App offen lassen`);
+  const t = secs < 60 ? secs + " s" : Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0") + " Min.";
+  progress(`Bilder: ${run.done} von ${run.total} fertig · ${t} · bitte App offen lassen`);
 }
 
 async function makeImage(i, run) {
   const page = state.page, s = page.scenes[i];
   setStatus(i, "wird angemeldet…");
   try {
-    const data = await AI.generateImage(s, i, page, state.chars, (txt) => setStatus(i, txt));
+    const rect = Render.panelRects(page.count)[i];
+    const data = await AI.generateImage(s, i, page, state.chars, (txt) => setStatus(i, txt), rect.w / rect.h);
     const img = await AI.loadImage(data);
     await ImgDB.put(page.id, i, data).catch(() => {});
     s.img = "db";

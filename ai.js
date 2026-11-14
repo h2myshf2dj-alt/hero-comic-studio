@@ -5,11 +5,17 @@
 //  - Szenentexte: Pollinations Text (ohne Konto, 1 Anfrage pro 30 Sekunden).
 const AI = {
   HORDE: "https://aihorde.net/api/v2",
-  AGENT: "HeroComicStudio:1.4:github.com/h2myshf2dj-alt/hero-comic-studio",
-  SIZE: 512,
-  NEGATIVE: "text, letters, words, speech bubble, caption, watermark, signature, logo, photo, photorealistic, 3d render, blurry, deformed hands, extra fingers, extra limbs, ugly",
-  // SD-1.5-Modelle, die gut zu Comics passen (das mit den meisten Rechnern wird genommen)
-  MODELS: ["Dreamshaper", "Deliberate", "Comic-Diffusion", "ToonYou", "Anything Diffusion", "stable_diffusion"],
+  AGENT: "HeroComicStudio:1.6:github.com/h2myshf2dj-alt/hero-comic-studio",
+  // Modelle in Reihenfolge der Qualität (alle im echten Test geprüft, Nov. 2026).
+  // Das erste, für das gerade Rechner verfügbar sind, wird genommen.
+  MODELS: [
+    { name: "Flux.1-Schnell fp8 (Compact)", steps: 4, cfg: 1, sampler: "k_euler", karras: false, base: 768, negative: false },
+    { name: "Z-Image-Turbo", steps: 8, cfg: 1, sampler: "k_euler", karras: false, base: 768, negative: false },
+    { name: "AlbedoBase XL 3.1", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 768, negative: true },
+    { name: "AlbedoBase XL (SDXL)", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 768, negative: true },
+    { name: "Deliberate", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 512, negative: true }
+  ],
+  NEGATIVE: "text, letters, speech bubble, watermark, signature, logo, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
   _model: undefined,
 
   key() {
@@ -34,46 +40,56 @@ const AI = {
     return chars.filter(c => c.name && t.includes(c.name.toLowerCase()));
   },
 
+  // Aufbau: Stil. Szene. Feste Beschreibung jeder genannten Figur. Verbote.
   buildPrompt(scene, page, chars) {
     const style = STYLES.find(s => s.id === page.style) || STYLES[0];
     const found = this.charactersIn(scene.text + " " + scene.bubble, chars);
-    const charText = found.map(c => c.look).join(", ");
-    let p = `${scene.text}`;
-    if (charText) p += `, ${charText}`;
-    p += `, ${style.prompt}, comic book panel`;
-    return p.slice(0, 900) + " ### " + this.NEGATIVE;
+    const charText = found.map(c => `${c.name} is ${c.look}.`).join(" ");
+    let p = `${style.prompt}. ${scene.text.trim()}`;
+    if (!/[.!?]$/.test(p)) p += ".";
+    if (charText) p += " " + charText;
+    p += " Original characters, no logos, no emblems, no text, no speech bubbles.";
+    return p.slice(0, 1800);
   },
 
-  // Verfügbares Modell mit den meisten Rechnern suchen (einmal pro Sitzung)
+  // Bestes verfügbares Modell suchen (einmal pro Sitzung)
   async pickModel() {
     if (this._model !== undefined) return this._model;
     this._model = null;
     try {
       const r = await this.fetchTimeout(this.HORDE + "/status/models?type=image&min_count=1",
         { headers: { "Client-Agent": this.AGENT } }, 15000);
-      const list = await r.json();
-      let best = null;
-      list.forEach(m => {
-        if (this.MODELS.includes(m.name) && (!best || m.count > best.count)) best = m;
-      });
-      if (best) this._model = best.name;
-    } catch (e) { /* ohne Modellwahl weiter */ }
+      const names = (await r.json()).map(m => m.name);
+      this._model = this.MODELS.find(m => names.includes(m.name)) || null;
+    } catch (e) { /* weiter unten: Standard */ }
     return this._model;
+  },
+  modelName() { return this._model ? this._model.name : ""; },
+
+  // Bildgröße passend zur Form des Panels (aspect = Breite / Höhe)
+  sizeFor(base, aspect) {
+    if (base < 768) return [512, 512];
+    if (aspect > 1.25) return [896, 640];
+    if (aspect < 0.8) return [640, 896];
+    return [768, 768];
   },
 
   // Ein Bild erzeugen. Gibt ein JPEG als Data-URL zurück.
   // onStatus(text) meldet den Fortschritt.
-  async generateImage(scene, index, page, chars, onStatus = () => {}) {
-    const model = await this.pickModel();
+  async generateImage(scene, index, page, chars, onStatus = () => {}, aspect = 1) {
+    const m = (await this.pickModel()) || this.MODELS[0];
     const seed = page.seed + index * 101 + (scene.variant || 0) * 7919;
+    const [w, h] = this.sizeFor(m.base, aspect);
+    let prompt = this.buildPrompt(scene, page, chars);
+    if (m.negative) prompt += " ### " + this.NEGATIVE;
     const body = {
-      prompt: this.buildPrompt(scene, page, chars),
-      params: { sampler_name: "k_euler_a", cfg_scale: 7, width: this.SIZE, height: this.SIZE,
-        steps: 20, n: 1, seed: String(seed), karras: true },
+      prompt,
+      params: { sampler_name: m.sampler, cfg_scale: m.cfg, width: w, height: h,
+        steps: m.steps, n: 1, seed: String(seed), karras: m.karras },
       nsfw: false, censor_nsfw: true, r2: false, shared: false,
-      slow_workers: true, trusted_workers: false
+      slow_workers: true, trusted_workers: false,
+      models: [m.name]
     };
-    if (model) body.models = [model];
 
     // 1. Auftrag abschicken (bei "zu viele Anfragen" kurz warten und nochmal)
     let id = null, lastErr = "";
@@ -88,16 +104,15 @@ const AI = {
       if (r.ok && j.id) { id = j.id; break; }
       lastErr = j.message || ("Fehler " + r.status);
       if (r.status === 429 || r.status === 503) { onStatus("Dienst ausgelastet, warte…"); await this.sleep(6000); continue; }
-      if (body.models && attempt === 0) { delete body.models; continue; } // ohne Modellwunsch probieren
       break;
     }
     if (!id) throw new Error(lastErr || "Auftrag abgelehnt");
 
-    // 2. Warten, bis das Bild fertig ist (höchstens 6 Minuten)
+    // 2. Warten, bis das Bild fertig ist (höchstens 25 Minuten)
     const start = Date.now();
     while (true) {
       await this.sleep(4000);
-      if (Date.now() - start > 360000) {
+      if (Date.now() - start > 1500000) {
         fetch(this.HORDE + "/generate/status/" + id, { method: "DELETE", headers: this.headers() }).catch(() => {});
         throw new Error("Zeit abgelaufen (Warteschlange zu lang)");
       }
@@ -109,10 +124,10 @@ const AI = {
         c = await r.json();
       } catch (e) { continue; }
       if (c.faulted) throw new Error("Rechner hat abgebrochen");
-      if (c.is_possible === false) throw new Error("kein Rechner verfügbar");
+      if (c.is_possible === false) { this._model = undefined; throw new Error("gerade kein Rechner für dieses Modell – bitte nochmal versuchen"); }
       if (c.done) break;
       if (c.processing > 0) onStatus("wird gezeichnet…");
-      else onStatus(`Warteschlange Platz ${c.queue_position || "?"}, ca. ${c.wait_time || "?"} s`);
+      else onStatus(`Warteschlange Platz ${c.queue_position || "?"}, noch ca. ${Math.max(1, Math.round((c.wait_time || 60) / 60))} Min.`);
     }
 
     // 3. Ergebnis abholen
@@ -195,7 +210,7 @@ const AI = {
       "Du bist Comic-Autor. " + (count === 1 ? "Mache aus dieser Geschichte genau 1 Comic-Szene (ein einzelnes Bild), " : `Teile diese Geschichte in genau ${count} aufeinanderfolgende Comic-Szenen fuer EINE Comicseite auf, `) +
       "mit spannendem Ablauf und starkem Schluss. " + charList +
       "Antworte NUR mit JSON ohne weitere Worte, genau in diesem Format: " +
-      '{"titel":"kurzer deutscher Titel","szenen":[{"bild":"kurze englische Bildbeschreibung in Stichworten, hoechstens 25 Woerter: wer (Name und Aussehen), was passiert, wo, Kameraperspektive","text":"kurzer deutscher Dialog oder Erzaehltext, hoechstens 12 Woerter","art":"sprechblase oder gedanke oder erzaehler"}]}. ' +
+      '{"titel":"kurzer deutscher Titel","szenen":[{"bild":"genaue englische Bildbeschreibung in 2 bis 3 ganzen Saetzen (hoechstens 60 Woerter): welche Figuren (mit Namen), was jede Figur gerade tut, Koerperhaltung, Blickrichtung, Ort und Hintergrund, Kameraperspektive; Figuren vollstaendig sichtbar","text":"kurzer Dialog oder Erzaehltext in einfachem, korrektem Deutsch, hoechstens 12 Woerter","art":"sprechblase oder gedanke oder erzaehler"}]}. ' +
       "Geschichte: " + story;
 
     const raw = await this.askText(instruction, onStatus);
