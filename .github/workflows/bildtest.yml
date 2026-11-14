@@ -1,0 +1,25 @@
+name: Bildtest
+on:
+  push:
+    branches: [main]
+    paths: ["tools/bildtest.config.json"]
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/bildtest.mjs
+      - name: Ergebnisse ablegen
+        run: |
+          git config user.name "bildtest"
+          git config user.email "noreply@github.com"
+          git checkout --orphan test-output
+          git rm -rfq --cached .
+          git add -f out
+          git commit -qm "Bildtest-Ergebnisse"
+          git push -f origin test-output

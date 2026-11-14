@@ -1,0 +1,83 @@
+{
+ "listModels": true,
+ "parallel": 3,
+ "jobs": [
+  {
+   "name": "p3_Dreamshaper",
+   "model": "Dreamshaper",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_Dreamshaper",
+   "model": "Dreamshaper",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_Deliberate",
+   "model": "Deliberate",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_Deliberate",
+   "model": "Deliberate",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_ComicDiffusion",
+   "model": "Comic-Diffusion",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_ComicDiffusion",
+   "model": "Comic-Diffusion",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_stable_diffusion",
+   "model": "stable_diffusion",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_stable_diffusion",
+   "model": "stable_diffusion",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_AlbedoBase",
+   "model": "AlbedoBase XL (SDXL)",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_AlbedoBase",
+   "model": "AlbedoBase XL (SDXL)",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_Anything",
+   "model": "Anything Diffusion",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p2_Anything",
+   "model": "Anything Diffusion",
+   "prompt": "criminal in black jacket and ski mask pointing a knife at a frightened man in a grey coat with raised hands, dark alley, side view, both figures fully visible, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  },
+  {
+   "name": "p3_nomodel",
+   "prompt": "masked superhero in dark blue costume and red cape leaping down from a rooftop toward a criminal in a black jacket standing in an alley, full body, low angle view, night city, 1990s american superhero comic book art, bold black ink outlines, vivid saturated colors, cel shading, dynamic pose, detailed background",
+   "negative": "text, letters, speech bubble, watermark, signature, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, extra fingers, bad anatomy, multiple panels"
+  }
+ ]
+}
