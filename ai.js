@@ -5,12 +5,12 @@
 //  - Szenentexte: Pollinations Text (ohne Konto, 1 Anfrage pro 30 Sekunden).
 const AI = {
   HORDE: "https://aihorde.net/api/v2",
-  AGENT: "HeroComicStudio:1.6:github.com/h2myshf2dj-alt/hero-comic-studio",
+  AGENT: "HeroComicStudio:1.7:github.com/h2myshf2dj-alt/hero-comic-studio",
   // Modelle in Reihenfolge der Qualität (alle im echten Test geprüft, Nov. 2026).
   // Das erste, für das gerade Rechner verfügbar sind, wird genommen.
   MODELS: [
-    { name: "Flux.1-Schnell fp8 (Compact)", steps: 4, cfg: 1, sampler: "k_euler", karras: false, base: 768, negative: false },
     { name: "Z-Image-Turbo", steps: 8, cfg: 1, sampler: "k_euler", karras: false, base: 768, negative: false },
+    { name: "Flux.1-Schnell fp8 (Compact)", steps: 4, cfg: 1, sampler: "k_euler", karras: false, base: 768, negative: false },
     { name: "AlbedoBase XL 3.1", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 768, negative: true },
     { name: "AlbedoBase XL (SDXL)", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 768, negative: true },
     { name: "Deliberate", steps: 20, cfg: 7, sampler: "k_euler_a", karras: true, base: 512, negative: true }

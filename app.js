@@ -1,5 +1,5 @@
 // Hero Comic Studio – Bedienung
-const APP_VERSION = "1.6";
+const APP_VERSION = "1.7";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -170,7 +170,7 @@ async function makeImage(i, run) {
   }
 }
 
-// Mehrere Bilder gleichzeitig in Auftrag geben (höchstens 3 auf einmal)
+// Alle Bilder gleichzeitig in Auftrag geben
 async function runJobs(todo) {
   const run = { total: todo.length, done: 0, t0: Date.now() };
   const timer = setInterval(() => updateGenProgress(run), 1000);
@@ -184,7 +184,10 @@ async function runJobs(todo) {
       if (await makeImage(i, run)) ok++;
     }
   };
-  await Promise.all([worker(), worker(), worker()]);
+  // alle Aufträge gleichzeitig anmelden (leicht versetzt wegen Anmelde-Limit)
+  const workers = [];
+  for (let k = 0; k < Math.min(6, todo.length); k++) { workers.push(worker()); await AI.sleep(700); }
+  await Promise.all(workers);
   clearInterval(timer); progress(null);
   return ok;
 }
