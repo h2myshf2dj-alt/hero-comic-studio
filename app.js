@@ -204,21 +204,30 @@ async function writeScenes() {
   const hasContent = state.page.scenes.some(s => s.text.trim() || s.bubble.trim());
   if (hasContent && !confirm("Die vorhandenen Szenentexte werden ersetzt. Weiter?")) return;
   setBusy(true);
-  progress("Die KI schreibt deine 6 Szenen … (ca. 10–30 Sekunden)");
+  const t0 = Date.now();
+  const tick = setInterval(() => {
+    progress(`Die KI schreibt deine 6 Szenen … ${Math.round((Date.now() - t0) / 1000)} s (dauert bis zu 1–2 Minuten)`);
+  }, 1000);
+  progress("Die KI schreibt deine 6 Szenen …");
+  let res = null;
   try {
-    const res = await AI.writeScenes(story, state.chars);
-    if (res.title && !state.page.title) { state.page.title = res.title; $("pageTitle").value = res.title; }
-    res.scenes.forEach((r, i) => {
-      const s = state.page.scenes[i];
-      s.text = r.text; s.bubble = r.bubble; s.bubbleType = r.bubbleType;
-    });
-    buildSceneCards(); draw(); saveNow();
-    toast("Szenen fertig! Jetzt „Alle Bilder erzeugen“ tippen.", 3500);
+    res = await AI.writeScenes(story, state.chars);
   } catch (e) {
-    toast("Die Text-KI ist gerade nicht erreichbar. Bitte später nochmal oder Szenen selbst schreiben.", 4500);
-  } finally {
-    progress(null); setBusy(false);
+    clearInterval(tick); progress(null);
+    if (confirm("Die kostenlose Text-KI ist gerade nicht erreichbar.\n\nSoll ich stattdessen eine einfache Vorlage mit 6 Szenen aus deiner Geschichte machen? Du kannst die Texte danach ändern.")) {
+      res = AI.templateScenes(story);
+    }
   }
+  clearInterval(tick); progress(null); setBusy(false);
+  if (!res) return;
+  if (res.title && !state.page.title) { state.page.title = res.title; $("pageTitle").value = res.title; }
+  res.scenes.forEach((r, i) => {
+    const s = state.page.scenes[i];
+    s.text = r.text; s.bubble = r.bubble; s.bubbleType = r.bubbleType;
+  });
+  buildSceneCards(); draw(); saveNow();
+  $("scenes").scrollIntoView({ behavior: "smooth" });
+  toast("6 Szenen fertig! Jetzt „Alle Bilder erzeugen“ tippen.", 4000);
 }
 
 // ---------- Export ----------

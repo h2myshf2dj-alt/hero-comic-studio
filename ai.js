@@ -43,6 +43,63 @@ const AI = {
 
   sleep(ms) { return new Promise(r => setTimeout(r, ms)); },
 
+  // Anfrage mit Zeitlimit
+  async fetchTimeout(url, opts = {}, ms = 45000) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
+    try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
+    finally { clearTimeout(t); }
+  },
+
+  // Mehrere kostenlose Wege nacheinander probieren
+  async askText(prompt) {
+    const tries = [
+      async () => {
+        const r = await this.fetchTimeout("https://text.pollinations.ai/openai", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "openai", messages: [{ role: "user", content: prompt }],
+            seed: Math.floor(Math.random() * 99999) })
+        });
+        if (!r.ok) throw new Error(r.status);
+        const j = await r.json();
+        return j.choices[0].message.content;
+      },
+      async () => {
+        const r = await this.fetchTimeout("https://text.pollinations.ai/" + encodeURIComponent(prompt));
+        if (!r.ok) throw new Error(r.status);
+        return r.text();
+      },
+      async () => {
+        const r = await this.fetchTimeout("https://text.pollinations.ai/" + encodeURIComponent(prompt) + "?model=mistral");
+        if (!r.ok) throw new Error(r.status);
+        return r.text();
+      }
+    ];
+    for (const t of tries) {
+      try {
+        const txt = await t();
+        if (txt && txt.includes("{")) return txt;
+      } catch (e) { /* nächsten Weg probieren */ }
+    }
+    throw new Error("Text-KI nicht erreichbar");
+  },
+
+  // Ersatz ohne KI: einfache Vorlage aus der Geschichte
+  templateScenes(story) {
+    const parts = [
+      ["establishing wide shot, peaceful beginning", "Es war ein ganz normaler Tag ...", "caption"],
+      ["medium shot, calm moment, characters introduced", "Was für ein schöner Tag!", "speech"],
+      ["close-up of surprised faces, something strange appears", "Moment mal ... was ist das?!", "speech"],
+      ["dynamic action scene, dramatic low angle, motion lines", "Oh nein!", "speech"],
+      ["intense climax, dramatic lighting, high tension", "Ich muss etwas tun ...", "thought"],
+      ["final panel, surprising ending, cinematic wide shot", "Doch dann geschah das Unerwartete ...", "caption"]
+    ];
+    return {
+      title: "",
+      scenes: parts.map(([shot, bubble, type]) => ({ text: `${shot}: ${story}`, bubble, bubbleType: type }))
+    };
+  },
+
   // Geschichte -> 6 Szenen (kostenlose Text-KI)
   async writeScenes(story, chars) {
     const charList = chars.length
@@ -55,11 +112,7 @@ const AI = {
       '{"titel":"kurzer deutscher Titel","szenen":[{"bild":"genaue englische Bildbeschreibung mit Ort, Figuren mit Namen, Handlung, Kameraperspektive","text":"kurzer deutscher Dialog oder Erzaehltext, hoechstens 12 Woerter","art":"sprechblase oder gedanke oder erzaehler"}]}. ' +
       "Geschichte: " + story;
 
-    const url = "https://text.pollinations.ai/" + encodeURIComponent(instruction) +
-      "?model=openai&seed=" + Math.floor(Math.random() * 99999);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Text-KI antwortet nicht (" + res.status + ")");
-    const raw = await res.text();
+    const raw = await this.askText(instruction);
     const start = raw.indexOf("{"), end = raw.lastIndexOf("}");
     if (start < 0 || end < 0) throw new Error("Antwort nicht lesbar");
     const data = JSON.parse(raw.slice(start, end + 1));
