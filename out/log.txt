@@ -1,0 +1,23 @@
+  [s5_flux] submit 429: {"message":"2 per 1 second"}
+  [s1_flux] submit 429: {"message":"2 per 1 second"}
+  [s4_flux] submit 429: {"message":"2 per 1 second"}
+  [s1_zimg] submit 429: {"message":"2 per 1 second"}
+  [s2_flux] submit 429: {"message":"2 per 1 second"}
+  [s5_flux] submit 429: {"message":"2 per 1 second"}
+  [s2_flux] submit 429: {"message":"2 per 1 second"}
+  [s1_zimg] submit 429: {"message":"2 per 1 second"}
+  [s1_zimg] submit 429: {"message":"2 per 1 second"}
+  [s1_zimg] OK 434s model=Z-Image-Turbo censored=false worker=Wanabeelee 4090N
+  [s6_flux] OK 523s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Neon_Nexus_5090
+  [s3_flux] OK 529s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Wanabeelee 4090N
+  [s4_flux] OK 531s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Neon_Nexus_5090
+  [s1_flux] OK 532s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Neon_Nexus_3090_5070ti
+  [s5_flux] OK 535s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Wanabeelee 4090N
+  [s2_flux] OK 550s model=Flux.1-Schnell fp8 (Compact) censored=false worker=tazlin-larger-machine-2
+  [s2_zimg] OK 445s model=Z-Image-Turbo censored=false worker=NothingDark-RTX3090
+  [wide_flux] OK 575s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Wanabeelee 4090N
+  [s3_zimg] OK 590s model=Z-Image-Turbo censored=false worker=Neon_Nexus_5090
+  [s6_zimg] OK 585s model=Z-Image-Turbo censored=false worker=Neon_Nexus_5090
+  [s4_zimg] OK 601s model=Z-Image-Turbo censored=false worker=NothingDark-RTX3090
+  [s5_zimg] OK 606s model=Z-Image-Turbo censored=false worker=NothingDark-RTX3090
+  [tall_flux] OK 591s model=Flux.1-Schnell fp8 (Compact) censored=false worker=Wanabeelee 4090N
