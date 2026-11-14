@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hero Comic Studio</title>
+<meta name="theme-color" content="#0d0d0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hero Comic">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">HERO <span>COMIC</span> STUDIO</div>
+</header>
+
+<main>
+  <!-- ===== SEITE ===== -->
+  <section id="view-page" class="view active">
+    <div class="card">
+      <label>Titel der Seite</label>
+      <input id="pageTitle" type="text" placeholder="z. B. Der Blitz von Neo-City">
+      <label>Zeichenstil</label>
+      <select id="pageStyle"></select>
+    </div>
+
+    <div class="card">
+      <label>Deine Geschichte (optional)</label>
+      <textarea id="storyIdea" rows="3" placeholder="z. B. Ein junger Held entdeckt elektrische Kräfte und kämpft gegen einen Roboter-Schurken in einer futuristischen Stadt."></textarea>
+      <button id="btnWriteScenes" class="btn gold">✨ KI schreibt die 6 Szenen</button>
+      <p class="hint">Oder schreib die 6 Szenen unten selbst.</p>
+    </div>
+
+    <div class="card canvas-card">
+      <canvas id="comicCanvas" width="1200" height="1800"></canvas>
+      <p class="hint center">Tippe auf ein Bild, um die Szene zu bearbeiten.</p>
+    </div>
+
+    <div id="progress" class="progress hidden"></div>
+
+    <div class="actions">
+      <button id="btnGenAll" class="btn red">🎨 Alle Bilder erzeugen</button>
+      <button id="btnExport" class="btn gold">💾 Seite als Bild speichern</button>
+    </div>
+
+    <div id="scenes"></div>
+
+    <div class="actions">
+      <button id="btnNewPage" class="btn ghost">＋ Neue leere Seite</button>
+    </div>
+  </section>
+
+  <!-- ===== FIGUREN ===== -->
+  <section id="view-chars" class="view">
+    <div class="card">
+      <h2>Neue Figur</h2>
+      <label>Name</label>
+      <input id="charName" type="text" placeholder="z. B. Volt">
+      <label>Aussehen (so genau wie möglich)</label>
+      <textarea id="charLook" rows="4" placeholder="z. B. junger Mann, 19 Jahre, kurze blonde Haare, blaue Augen, schlank, blau-gelbes Kostüm mit Blitz-Symbol auf der Brust, gelbe Maske"></textarea>
+      <button id="btnSaveChar" class="btn red">Figur speichern</button>
+      <p class="hint">Wenn der Name einer Figur in einer Szene vorkommt, wird ihr Aussehen automatisch zum Bild hinzugefügt. So sieht sie auf allen Bildern ähnlich aus.</p>
+    </div>
+    <div id="charList"></div>
+  </section>
+
+  <!-- ===== BIBLIOTHEK ===== -->
+  <section id="view-lib" class="view">
+    <h2 class="pad">Meine Comicseiten</h2>
+    <div id="libList"></div>
+  </section>
+
+  <!-- ===== INFO ===== -->
+  <section id="view-info" class="view">
+    <div class="card">
+      <h2>So funktioniert's</h2>
+      <ol class="steps">
+        <li>Unter <b>Figuren</b> deine Helden anlegen (Name + Aussehen).</li>
+        <li>Unter <b>Seite</b> Titel und Stil wählen.</li>
+        <li>Geschichte eingeben und <b>„KI schreibt die 6 Szenen“</b> tippen – oder die Szenen selbst ausfüllen.</li>
+        <li><b>„Alle Bilder erzeugen“</b> tippen und warten (ca. 2 Minuten).</li>
+        <li>Einzelne Bilder mit <b>„Neu erzeugen“</b> verbessern, Texte jederzeit ändern.</li>
+        <li><b>„Seite als Bild speichern“</b> → „Bild sichern“ wählen.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h2>Kosten &amp; Grenzen (ehrlich)</h2>
+      <p>Die App ist kostenlos. Bilder und Szenentexte kommen vom freien Dienst <b>Pollinations.ai</b> – ohne Konto, ohne Schlüssel.</p>
+      <ul class="steps">
+        <li>Ohne Anmeldung nur etwa <b>1 Bild alle 15 Sekunden</b>. Deshalb wartet die App automatisch zwischen den Bildern.</li>
+        <li>Es kann ein kleines Wasserzeichen erscheinen.</li>
+        <li>Nur für private, nicht-kommerzielle Nutzung.</li>
+        <li>Der Dienst kann sich jederzeit ändern oder ausfallen. Alles andere (Texte, Figuren, Speichern) funktioniert trotzdem.</li>
+        <li>Figuren sehen ähnlich, aber nicht immer exakt gleich aus.</li>
+      </ul>
+      <p class="hint">Deine Seiten und Figuren werden nur auf diesem Gerät gespeichert.</p>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-view="view-page" class="active"><span>📄</span>Seite</button>
+  <button data-view="view-chars"><span>🦸</span>Figuren</button>
+  <button data-view="view-lib"><span>📚</span>Bibliothek</button>
+  <button data-view="view-info"><span>ℹ️</span>Info</button>
+</nav>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="store.js"></script>
+<script src="ai.js"></script>
+<script src="render.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
