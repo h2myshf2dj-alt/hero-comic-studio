@@ -1,5 +1,5 @@
 // Hero Comic Studio – Bedienung
-const APP_VERSION = "1.3";
+const APP_VERSION = "1.4";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -8,7 +8,8 @@ const state = {
   images: [null, null, null, null, null, null],
   busy: false,
   busyIndex: -1,
-  lastRequest: 0
+  lastRequest: 0,
+  lastError: ""
 };
 
 // ---------- Hilfen ----------
@@ -64,17 +65,19 @@ function openPage(page) {
 async function reloadImages() {
   const page = state.page;
   for (let i = 0; i < 6; i++) {
-    const url = page.scenes[i].img;
-    if (!url) continue;
-    setStatus(i, "lädt…");
+    const s = page.scenes[i];
+    if (!s.img) continue;
     try {
-      const img = await AI.loadImage(url);
+      const data = await ImgDB.get(page.id, i);
+      if (!data) throw new Error("fehlt");
+      const img = await AI.loadImage(data);
       if (state.page !== page) return; // inzwischen andere Seite geöffnet
       state.images[i] = img;
       setStatus(i, "✔ Bild vorhanden");
       draw();
     } catch (e) {
-      setStatus(i, "Bild konnte nicht geladen werden – neu erzeugen");
+      s.img = null;
+      setStatus(i, "noch kein Bild");
     }
   }
 }
@@ -93,9 +96,9 @@ function buildSceneCards() {
     status.textContent = s.img ? "✔ Bild vorhanden" : "noch kein Bild";
     head.append(num, status);
 
-    const l1 = document.createElement("label"); l1.textContent = "Was passiert im Bild?";
+    const l1 = document.createElement("label"); l1.textContent = "Was passiert im Bild? (kurze englische Stichworte klappen am besten)";
     const ta = document.createElement("textarea"); ta.rows = 3; ta.value = s.text;
-    ta.placeholder = "z. B. Volt steht auf einem Hochhausdach, Blitze zucken aus seinen Händen, Nacht, Neonstadt";
+    ta.placeholder = "z. B. blonde woman walking a husky dog in a park, sunny day";
     ta.oninput = () => { s.text = ta.value; saveSoon(); };
 
     const l2 = document.createElement("label"); l2.textContent = "Text in der Blase (leer = keine Blase)";
@@ -132,36 +135,47 @@ function makeSelect(options, value) {
 function setStatus(i, text) { const el = $("status-" + i); if (el) el.textContent = text; }
 
 // ---------- Bilder erzeugen ----------
-async function waitForLimit(i, total, nr) {
-  const left = state.lastRequest + AI.WAIT_MS - Date.now();
-  if (left > 0) {
-    for (let s = Math.ceil(left / 1000); s > 0; s--) {
-      progress(`Bild ${nr} von ${total}: kurze Pause wegen Gratis-Limit … ${s} s`);
-      await AI.sleep(1000);
-    }
+function updateGenProgress(run) {
+  const secs = Math.round((Date.now() - run.t0) / 1000);
+  progress(`Bilder: ${run.done} von ${run.total} fertig · ${secs} s · bitte App offen lassen`);
+}
+
+async function makeImage(i, run) {
+  const page = state.page, s = page.scenes[i];
+  setStatus(i, "wird angemeldet…");
+  try {
+    const data = await AI.generateImage(s, i, page, state.chars, (txt) => setStatus(i, txt));
+    const img = await AI.loadImage(data);
+    await ImgDB.put(page.id, i, data).catch(() => {});
+    s.img = "db";
+    if (state.page === page) { state.images[i] = img; setStatus(i, "✔ Bild vorhanden"); draw(); }
+    return true;
+  } catch (e) {
+    state.lastError = (e && e.message) || "unbekannter Fehler";
+    setStatus(i, "✖ " + state.lastError);
+    return false;
+  } finally {
+    run.done++; updateGenProgress(run);
   }
 }
 
-async function makeImage(i, total, nr) {
-  const s = state.page.scenes[i];
-  await waitForLimit(i, total, nr);
-  progress(`Bild ${nr} von ${total} wird gezeichnet … (dauert oft 20–60 Sekunden)`);
-  state.busyIndex = i; draw();
-  setStatus(i, "wird gezeichnet…");
-  const url = AI.imageUrl(s, i, state.page, state.chars);
-  state.lastRequest = Date.now();
-  try {
-    const img = await AI.loadImage(url);
-    state.images[i] = img; s.img = url;
-    setStatus(i, "✔ Bild vorhanden");
-    return true;
-  } catch (e) {
-    setStatus(i, "✖ fehlgeschlagen – nochmal versuchen");
-    return false;
-  } finally {
-    state.lastRequest = Date.now();
-    state.busyIndex = -1; draw();
-  }
+// Mehrere Bilder gleichzeitig in Auftrag geben (höchstens 3 auf einmal)
+async function runJobs(todo) {
+  const run = { total: todo.length, done: 0, t0: Date.now() };
+  const timer = setInterval(() => updateGenProgress(run), 1000);
+  updateGenProgress(run);
+  todo.forEach(i => setStatus(i, "wartet…"));
+  const queue = todo.slice();
+  let ok = 0;
+  const worker = async () => {
+    while (queue.length) {
+      const i = queue.shift();
+      if (await makeImage(i, run)) ok++;
+    }
+  };
+  await Promise.all([worker(), worker(), worker()]);
+  clearInterval(timer); progress(null);
+  return ok;
 }
 
 async function generateOne(i) {
@@ -170,10 +184,9 @@ async function generateOne(i) {
   if (!s.text.trim()) { toast("Bitte erst beschreiben, was im Bild passiert."); return; }
   if (s.img) s.variant = (s.variant || 0) + 1; // neue Variante
   setBusy(true);
-  const ok = await makeImage(i, 1, 1);
-  progress(null); setBusy(false);
-  buildSceneCards(); saveNow();
-  toast(ok ? "Bild fertig!" : "Das Bild hat nicht geklappt. Bitte gleich nochmal versuchen.");
+  const ok = await runJobs([i]);
+  setBusy(false); refreshSceneButtons(); saveNow();
+  toast(ok ? "Bild fertig!" : "Hat nicht geklappt: " + state.lastError, ok ? 2600 : 6000);
 }
 
 async function generateAll() {
@@ -184,18 +197,19 @@ async function generateAll() {
   if (!todo.length) {
     if (!confirm("Alle Szenen haben schon ein Bild. Alle neu erzeugen?")) return;
     todo = filled;
+    todo.forEach(i => { state.page.scenes[i].variant = (state.page.scenes[i].variant || 0) + 1; });
   }
   setBusy(true);
-  let ok = 0;
-  for (let n = 0; n < todo.length; n++) {
-    const i = todo[n];
-    const s = state.page.scenes[i];
-    if (s.img) s.variant = (s.variant || 0) + 1;
-    if (await makeImage(i, todo.length, n + 1)) ok++;
-    saveNow();
-  }
-  progress(null); setBusy(false); buildSceneCards(); saveNow();
-  toast(ok === todo.length ? "Alle Bilder fertig!" : `${ok} von ${todo.length} Bildern fertig. Fehlende einzeln neu erzeugen.`, 4000);
+  const ok = await runJobs(todo);
+  setBusy(false); refreshSceneButtons(); saveNow();
+  toast(ok === todo.length ? "Alle Bilder fertig!"
+    : `${ok} von ${todo.length} Bildern fertig. Grund: ${state.lastError}`, 6000);
+}
+
+function refreshSceneButtons() {
+  document.querySelectorAll(".gen-btn").forEach((btn, i) => {
+    btn.textContent = state.page.scenes[i].img ? "🔄 Neu erzeugen" : "🎨 Bild erzeugen";
+  });
 }
 
 // ---------- KI schreibt Szenen ----------
@@ -212,7 +226,7 @@ async function writeScenes() {
   progress("Die KI schreibt deine 6 Szenen …");
   let res = null;
   try {
-    res = await AI.writeScenes(story, state.chars);
+    res = await AI.writeScenes(story, state.chars, (txt) => { clearInterval(tick); progress(txt); });
   } catch (e) {
     clearInterval(tick); progress(null);
     if (confirm("Die kostenlose Text-KI ist gerade nicht erreichbar.\n\nSoll ich stattdessen eine einfache Vorlage mit 6 Szenen aus deiner Geschichte machen? Du kannst die Texte danach ändern.")) {
@@ -307,12 +321,14 @@ function renderLib() {
     dup.onclick = () => {
       const copy = JSON.parse(JSON.stringify(Store.getPage(p.id)));
       copy.id = Store.newId(); copy.title = (copy.title || "Ohne Titel") + " (Kopie)";
+      const fromId = p.id;
+      ImgDB.copyPage(fromId, copy.id).catch(() => {});
       Store.savePage(copy); if (state.page) Store.savePage(state.page); renderLib(); toast("Kopie erstellt.");
     };
     const del = document.createElement("button"); del.className = "btn small ghost"; del.textContent = "🗑";
     del.onclick = () => {
       if (!confirm(`„${p.title || "Ohne Titel"}“ wirklich löschen?`)) return;
-      Store.deletePage(p.id);
+      Store.deletePage(p.id); ImgDB.delPage(p.id).catch(() => {});
       if (state.page && p.id === state.page.id) openPage(Store.emptyPage());
       renderLib();
     };
@@ -347,6 +363,11 @@ function init() {
   $("btnExport").onclick = exportPage;
   $("btnNewPage").onclick = () => { saveNow(); openPage(Store.emptyPage()); window.scrollTo(0, 0); toast("Neue Seite angelegt."); };
   $("btnSaveChar").onclick = saveChar;
+  try { $("hordeKey").value = localStorage.getItem("hcs_hordekey") || ""; } catch (e) {}
+  $("btnSaveKey").onclick = () => {
+    try { localStorage.setItem("hcs_hordekey", $("hordeKey").value.trim()); } catch (e) {}
+    toast($("hordeKey").value.trim() ? "Schlüssel gespeichert." : "Schlüssel entfernt (anonym).");
+  };
   document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => showView(b.dataset.view));
 
   // Tippen auf ein Panel -> zur Szene springen
