@@ -37,7 +37,7 @@ async function gen(job) {
     await sleep(8000);
   }
   if (!id) return;
-  while (Date.now() - t0 < 600000) {
+  while (Date.now() - t0 < 780000) {
     await sleep(5000);
     const c = await (await fetch(H + "/generate/check/" + id, { headers: head })).json().catch(() => ({}));
     if (c.faulted || c.is_possible === false) { say(`  [${job.name}] faulted/impossible ${JSON.stringify(c)}`); return; }

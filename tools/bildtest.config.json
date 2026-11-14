@@ -1,180 +1,199 @@
 {
  "listModels": false,
- "parallel": 5,
+ "parallel": 7,
  "jobs": [
   {
-   "name": "p2_flux",
+   "name": "s1_flux",
    "model": "Flux.1-Schnell fp8 (Compact)",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke crouches on the edge of a rooftop in the foreground, seen from behind, looking down into a dark alley where the thug and the old man stand far below as small figures. Night, city skyline, high angle view. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 4,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5000,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p3_flux",
+   "name": "s2_flux",
    "model": "Flux.1-Schnell fp8 (Compact)",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. The thug points a knife at the old man, who raises both hands in fear with his back against a brick wall. Dark alley at night, side view, both figures fully visible. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 4,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5001,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p5_flux",
+   "name": "s3_flux",
    "model": "Flux.1-Schnell fp8 (Compact)",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke leaps down through the air from a rooftop with arms spread, diving toward the thug who stands below in the alley and looks up in shock. Low angle view, full body, motion lines, night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 4,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5002,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p2_zimg",
+   "name": "s4_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke blocks a knife attack: he grabs the wrist of the thug's raised knife arm with one hand. They stand face to face, straining. Side view, full bodies visible, alley at night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "seed": 5003,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "s5_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke punches the thug in the jaw with his right fist. The thug is knocked backwards off his feet, the knife flies out of his hand. Side view, full bodies visible, impact burst, alley at night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "seed": 5004,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "s6_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke kneels and holds out his hand to help the old man stand up from the ground; the old man smiles gratefully. In the background the thug lies unconscious on the pavement. Alley at night, warm street light. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 768,
+   "h": 768,
+   "seed": 5005,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "s1_zimg",
    "model": "Z-Image-Turbo",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke crouches on the edge of a rooftop in the foreground, seen from behind, looking down into a dark alley where the thug and the old man stand far below as small figures. Night, city skyline, high angle view. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5000,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p3_zimg",
+   "name": "s2_zimg",
    "model": "Z-Image-Turbo",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. The thug points a knife at the old man, who raises both hands in fear with his back against a brick wall. Dark alley at night, side view, both figures fully visible. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5001,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p5_zimg",
+   "name": "s3_zimg",
    "model": "Z-Image-Turbo",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke leaps down through the air from a rooftop with arms spread, diving toward the thug who stands below in the alley and looks up in shock. Low angle view, full body, motion lines, night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5002,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p2_albedo31",
-   "model": "AlbedoBase XL 3.1",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 20,
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p3_albedo31",
-   "model": "AlbedoBase XL 3.1",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 20,
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p5_albedo31",
-   "model": "AlbedoBase XL 3.1",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 20,
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p2_dsxl",
-   "model": "DreamShaper XL",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 8,
-   "cfg": 2,
-   "sampler": "k_dpmpp_sde",
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p3_dsxl",
-   "model": "DreamShaper XL",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 8,
-   "cfg": 2,
-   "sampler": "k_dpmpp_sde",
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p5_dsxl",
-   "model": "DreamShaper XL",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
-   "negative": "text, letters, speech bubble, watermark, signature, logo, superman, batman, photo, photorealistic, 3d render, anime, blurry, deformed, extra limbs, bad anatomy, multiple panels",
-   "steps": 8,
-   "cfg": 2,
-   "sampler": "k_dpmpp_sde",
-   "w": 768,
-   "h": 768
-  },
-  {
-   "name": "p2_krea",
-   "model": "Krea2-Turbo_fp8",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A criminal in a black jacket and ski mask points a knife at a frightened man in a grey coat who raises both hands. Dark alley at night, side view, both figures fully visible.",
+   "name": "s4_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke blocks a knife attack: he grabs the wrist of the thug's raised knife arm with one hand. They stand face to face, straining. Side view, full bodies visible, alley at night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5003,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p3_krea",
-   "model": "Krea2-Turbo_fp8",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape leaps down from a rooftop toward a criminal in a black jacket standing below in an alley. Full body, low angle, night city.",
+   "name": "s5_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke punches the thug in the jaw with his right fist. The thug is knocked backwards off his feet, the knife flies out of his hand. Side view, full bodies visible, impact burst, alley at night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5004,
    "params": {
     "karras": false
    }
   },
   {
-   "name": "p5_krea",
-   "model": "Krea2-Turbo_fp8",
-   "prompt": "1990s american superhero comic book illustration, bold black ink outlines, vivid saturated flat colors, crosshatch shading, halftone dots, hand drawn. A masked superhero in a dark blue costume with a red cape punches a criminal in a black jacket in the chest. The criminal falls backwards to the ground, dropping his knife. Side view, full bodies visible, alley at night.",
+   "name": "s6_zimg",
+   "model": "Z-Image-Turbo",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke kneels and holds out his hand to help the old man stand up from the ground; the old man smiles gratefully. In the background the thug lies unconscious on the pavement. Alley at night, warm street light. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. The old man is an elderly man with a grey beard, wearing a long beige trench coat and a brown hat. Original characters, no logos, no emblems, no text, no speech bubbles.",
    "steps": 8,
    "cfg": 1,
    "sampler": "k_euler",
    "w": 768,
    "h": 768,
+   "seed": 5005,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "wide_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke punches the thug in the jaw with his right fist. The thug is knocked backwards off his feet, the knife flies out of his hand. Side view, full bodies visible, impact burst, alley at night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 896,
+   "h": 640,
+   "seed": 7,
+   "params": {
+    "karras": false
+   }
+  },
+  {
+   "name": "tall_flux",
+   "model": "Flux.1-Schnell fp8 (Compact)",
+   "prompt": "1990s American superhero comic book panel, 1995 style, bold black ink outlines, vivid saturated colors, crosshatch shading, halftone dots, hand-drawn. Nachtfalke leaps down through the air from a rooftop with arms spread, diving toward the thug who stands below in the alley and looks up in shock. Low angle view, full body, motion lines, night. Nachtfalke is a tall muscular man in a dark green bodysuit with a yellow lightning stripe across the chest, yellow gloves and yellow boots, a green domino mask, short white hair, no cape. The thug is a bald heavyset thug with a red bandana covering his mouth, wearing a brown leather jacket and jeans. Original characters, no logos, no emblems, no text, no speech bubbles.",
+   "steps": 4,
+   "cfg": 1,
+   "sampler": "k_euler",
+   "w": 640,
+   "h": 896,
+   "seed": 7,
    "params": {
     "karras": false
    }
