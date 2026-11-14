@@ -2,21 +2,37 @@
 const Render = {
   W: 1200, H: 1800, M: 40, TITLE_H: 120, GAP: 24,
 
-  panelRects() {
-    const { W, H, M, TITLE_H, GAP } = this;
-    const top = M + TITLE_H;
-    const pw = (W - 2 * M - GAP) / 2;
-    const ph = (H - top - M - 2 * GAP) / 3;
-    const rects = [];
-    for (let r = 0; r < 3; r++) for (let c = 0; c < 2; c++) {
-      rects.push({ x: M + c * (pw + GAP), y: top + r * (ph + GAP), w: pw, h: ph });
+  // Aufteilung der Seite je nach Anzahl der Szenen
+  layout(count) {
+    const { W, M, TITLE_H, GAP } = this;
+    const top = M + TITLE_H, full = W - 2 * M, half = (full - GAP) / 2;
+    const col2 = M + half + GAP;
+    let rects, bottom;
+    if (count === 1) {                       // ein großes Bild
+      rects = [{ x: M, y: top, w: full, h: full }];
+    } else if (count === 2) {                // zwei Bilder untereinander
+      const ph = 788;
+      rects = [0, 1].map(k => ({ x: M, y: top + k * (ph + GAP), w: full, h: ph }));
+    } else if (count === 3) {                // ein breites oben, zwei unten
+      const ph = 788;
+      rects = [{ x: M, y: top, w: full, h: ph },
+        { x: M, y: top + ph + GAP, w: half, h: ph }, { x: col2, y: top + ph + GAP, w: half, h: ph }];
+    } else if (count === 4) {                // 2 x 2
+      rects = [0, 1, 2, 3].map(k => ({ x: k % 2 ? col2 : M, y: top + Math.floor(k / 2) * (half + GAP), w: half, h: half }));
+    } else {                                 // 2 x 3
+      const ph = 522;
+      rects = [0, 1, 2, 3, 4, 5].map(k => ({ x: k % 2 ? col2 : M, y: top + Math.floor(k / 2) * (ph + GAP), w: half, h: ph }));
     }
-    return rects;
+    const last = rects[rects.length - 1];
+    return { rects, H: Math.round(last.y + last.h + M) };
   },
+  panelRects(count = 6) { return this.layout(count).rects; },
 
   draw(canvas, page, images, busyIndex) {
     const ctx = canvas.getContext("2d");
-    const { W, H, M, TITLE_H } = this;
+    const { W, M, TITLE_H } = this;
+    const count = page.count || 6;
+    const { rects, H } = this.layout(count);
     canvas.width = W; canvas.height = H;
 
     // Papier
@@ -40,7 +56,7 @@ const Render = {
     ctx.fillStyle = "#d7262e"; ctx.fillText(title, W / 2, ty);
 
     // Panels
-    this.panelRects().forEach((r, i) => {
+    rects.forEach((r, i) => {
       const scene = page.scenes[i];
       const img = images[i];
       ctx.save();
@@ -54,7 +70,7 @@ const Render = {
         ctx.fillStyle = "#b9b2a2";
         ctx.font = "56px Bangers, Impact, sans-serif";
         ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText(i === busyIndex ? "ZEICHNE..." : "SZENE " + (i + 1), r.x + r.w / 2, r.y + r.h / 2);
+        ctx.fillText("SZENE " + (i + 1), r.x + r.w / 2, r.y + r.h / 2);
       }
       if (scene && scene.bubble && scene.bubble.trim()) this.bubble(ctx, r, scene);
       ctx.restore();

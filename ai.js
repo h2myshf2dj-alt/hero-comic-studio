@@ -161,14 +161,14 @@ const AI = {
       } catch (e) { /* nochmal */ }
       if (attempt === 0) {
         for (let s = 32; s > 0; s--) { onStatus(`Text-KI ist besetzt, neuer Versuch in ${s} s`); await this.sleep(1000); }
-        onStatus("Die KI schreibt deine 6 Szenen …");
+        onStatus("Die KI schreibt …");
       }
     }
     throw new Error("Text-KI nicht erreichbar");
   },
 
   // Ersatz ohne KI: einfache Vorlage aus der Geschichte
-  templateScenes(story) {
+  templateScenes(story, count = 6) {
     const parts = [
       ["establishing wide shot, peaceful beginning", "Es war ein ganz normaler Tag ...", "caption"],
       ["medium shot, calm moment, characters introduced", "Was für ein schöner Tag!", "speech"],
@@ -177,19 +177,22 @@ const AI = {
       ["intense climax, dramatic lighting, high tension", "Ich muss etwas tun ...", "thought"],
       ["final panel, surprising ending, cinematic wide shot", "Doch dann geschah das Unerwartete ...", "caption"]
     ];
+    // passende Auswahl: Anfang ... Höhepunkt ... Schluss
+    const pick = { 1: [3], 2: [0, 5], 3: [0, 3, 5], 4: [0, 2, 3, 5] }[count];
+    const use = pick ? pick.map(k => parts[k]) : parts;
     return {
       title: "",
-      scenes: parts.map(([shot, bubble, type]) => ({ text: `${shot}: ${story}`, bubble, bubbleType: type }))
+      scenes: use.map(([shot, bubble, type]) => ({ text: `${shot}: ${story}`, bubble, bubbleType: type }))
     };
   },
 
   // Geschichte -> 6 Szenen (kostenlose Text-KI)
-  async writeScenes(story, chars, onStatus) {
+  async writeScenes(story, chars, onStatus, count = 6) {
     const charList = chars.length
       ? "Figuren: " + chars.map(c => `${c.name} (${c.look})`).join("; ") + ". "
       : "";
     const instruction =
-      "Du bist Comic-Autor. Teile diese Geschichte in genau 6 aufeinanderfolgende Comic-Szenen fuer EINE Comicseite auf, " +
+      "Du bist Comic-Autor. " + (count === 1 ? "Mache aus dieser Geschichte genau 1 Comic-Szene (ein einzelnes Bild), " : `Teile diese Geschichte in genau ${count} aufeinanderfolgende Comic-Szenen fuer EINE Comicseite auf, `) +
       "mit spannendem Ablauf und starkem Schluss. " + charList +
       "Antworte NUR mit JSON ohne weitere Worte, genau in diesem Format: " +
       '{"titel":"kurzer deutscher Titel","szenen":[{"bild":"kurze englische Bildbeschreibung in Stichworten, hoechstens 25 Woerter: wer (Name und Aussehen), was passiert, wo, Kameraperspektive","text":"kurzer deutscher Dialog oder Erzaehltext, hoechstens 12 Woerter","art":"sprechblase oder gedanke oder erzaehler"}]}. ' +
@@ -204,7 +207,7 @@ const AI = {
     const typeMap = { sprechblase: "speech", gedanke: "thought", erzaehler: "caption", "erzähler": "caption" };
     return {
       title: data.titel || data.title || "",
-      scenes: list.slice(0, 6).map(s => ({
+      scenes: list.slice(0, count).map(s => ({
         text: s.bild || s.image || "",
         bubble: s.text || "",
         bubbleType: typeMap[(s.art || "").toLowerCase()] || "speech"

@@ -1,5 +1,5 @@
 // Offline-Speicher für die App-Dateien (KI-Bilder werden nicht zwischengespeichert)
-const CACHE = "hcs-v5";
+const CACHE = "hcs-v6";
 const FILES = ["./", "index.html", "style.css", "store.js", "ai.js", "render.js", "app.js",
   "manifest.json", "icon-180.png", "icon-192.png", "icon-512.png"];
 

@@ -1,5 +1,5 @@
 // Hero Comic Studio – Bedienung
-const APP_VERSION = "1.4";
+const APP_VERSION = "1.5";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -39,8 +39,9 @@ function saveNow() {
 function makeThumb() {
   try {
     const c = document.createElement("canvas");
-    c.width = 120; c.height = 180;
-    c.getContext("2d").drawImage($("comicCanvas"), 0, 0, 120, 180);
+    const src = $("comicCanvas");
+    c.width = 120; c.height = Math.round(120 * src.height / src.width);
+    c.getContext("2d").drawImage(src, 0, 0, c.width, c.height);
     return c.toDataURL("image/jpeg", 0.6);
   } catch (e) { return null; }
 }
@@ -56,6 +57,9 @@ function openPage(page) {
   state.images = [null, null, null, null, null, null];
   $("pageTitle").value = page.title || "";
   $("pageStyle").value = page.style;
+  if (!page.count) page.count = 6;
+  $("pageCount").value = String(page.count);
+  updateCountTexts();
   $("storyIdea").value = page.story || "";
   buildSceneCards();
   draw();
@@ -86,7 +90,7 @@ async function reloadImages() {
 function buildSceneCards() {
   const box = $("scenes");
   box.innerHTML = "";
-  state.page.scenes.forEach((s, i) => {
+  state.page.scenes.slice(0, state.page.count).forEach((s, i) => {
     const card = document.createElement("div");
     card.className = "card scene"; card.id = "scene-" + i;
 
@@ -191,7 +195,7 @@ async function generateOne(i) {
 
 async function generateAll() {
   if (state.busy) return;
-  const filled = state.page.scenes.map((s, i) => i).filter(i => state.page.scenes[i].text.trim());
+  const filled = state.page.scenes.map((s, i) => i).filter(i => i < state.page.count && state.page.scenes[i].text.trim());
   if (!filled.length) { toast("Bitte erst die Szenen ausfüllen oder die KI schreiben lassen."); return; }
   let todo = filled.filter(i => !state.page.scenes[i].img);
   if (!todo.length) {
@@ -216,33 +220,33 @@ function refreshSceneButtons() {
 async function writeScenes() {
   const story = $("storyIdea").value.trim();
   if (!story) { toast("Bitte erst eine Geschichte eingeben."); return; }
-  const hasContent = state.page.scenes.some(s => s.text.trim() || s.bubble.trim());
+  const hasContent = state.page.scenes.slice(0, state.page.count).some(s => s.text.trim() || s.bubble.trim());
   if (hasContent && !confirm("Die vorhandenen Szenentexte werden ersetzt. Weiter?")) return;
   setBusy(true);
   const t0 = Date.now();
   const tick = setInterval(() => {
-    progress(`Die KI schreibt deine 6 Szenen … ${Math.round((Date.now() - t0) / 1000)} s (dauert bis zu 1–2 Minuten)`);
+    progress(`Die KI schreibt … ${Math.round((Date.now() - t0) / 1000)} s (dauert bis zu 1–2 Minuten)`);
   }, 1000);
-  progress("Die KI schreibt deine 6 Szenen …");
+  progress("Die KI schreibt …");
   let res = null;
   try {
-    res = await AI.writeScenes(story, state.chars, (txt) => { clearInterval(tick); progress(txt); });
+    res = await AI.writeScenes(story, state.chars, (txt) => { clearInterval(tick); progress(txt); }, state.page.count);
   } catch (e) {
     clearInterval(tick); progress(null);
-    if (confirm("Die kostenlose Text-KI ist gerade nicht erreichbar.\n\nSoll ich stattdessen eine einfache Vorlage mit 6 Szenen aus deiner Geschichte machen? Du kannst die Texte danach ändern.")) {
-      res = AI.templateScenes(story);
+    if (confirm("Die kostenlose Text-KI ist gerade nicht erreichbar.\n\nSoll ich stattdessen eine einfache Vorlage aus deiner Geschichte machen? Du kannst die Texte danach ändern.")) {
+      res = AI.templateScenes(story, state.page.count);
     }
   }
   clearInterval(tick); progress(null); setBusy(false);
   if (!res) return;
   if (res.title && !state.page.title) { state.page.title = res.title; $("pageTitle").value = res.title; }
-  res.scenes.forEach((r, i) => {
+  res.scenes.slice(0, state.page.count).forEach((r, i) => {
     const s = state.page.scenes[i];
     s.text = r.text; s.bubble = r.bubble; s.bubbleType = r.bubbleType;
   });
   buildSceneCards(); draw(); saveNow();
   $("scenes").scrollIntoView({ behavior: "smooth" });
-  toast("6 Szenen fertig! Jetzt „Alle Bilder erzeugen“ tippen.", 4000);
+  toast("Szenen fertig! Jetzt „Alle Bilder erzeugen“ tippen.", 4000);
 }
 
 // ---------- Export ----------
@@ -337,6 +341,12 @@ function renderLib() {
   });
 }
 
+function updateCountTexts() {
+  const n = state.page.count;
+  $("btnWriteScenes").textContent = n === 1 ? "✨ KI schreibt die Szene" : `✨ KI schreibt die ${n} Szenen`;
+  $("writeHint").textContent = n === 1 ? "Oder schreib die Szene unten selbst." : `Oder schreib die ${n} Szenen unten selbst.`;
+}
+
 // ---------- Navigation ----------
 function showView(id) {
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
@@ -357,6 +367,10 @@ function init() {
 
   $("pageTitle").oninput = (e) => { state.page.title = e.target.value; draw(); saveSoon(); };
   $("pageStyle").onchange = (e) => { state.page.style = e.target.value; saveSoon(); toast("Neuer Stil gilt für neu erzeugte Bilder."); };
+  $("pageCount").onchange = (e) => {
+    state.page.count = parseInt(e.target.value, 10);
+    updateCountTexts(); buildSceneCards(); draw(); saveSoon();
+  };
   $("storyIdea").oninput = (e) => { state.page.story = e.target.value; saveSoon(); };
   $("btnWriteScenes").onclick = writeScenes;
   $("btnGenAll").onclick = generateAll;
@@ -374,8 +388,8 @@ function init() {
   $("comicCanvas").addEventListener("click", (e) => {
     const c = e.currentTarget, rect = c.getBoundingClientRect();
     const x = (e.clientX - rect.left) * (Render.W / rect.width);
-    const y = (e.clientY - rect.top) * (Render.H / rect.height);
-    const i = Render.panelRects().findIndex(r => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h);
+    const y = (e.clientY - rect.top) * (c.height / rect.height);
+    const i = Render.panelRects(state.page.count).findIndex(r => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h);
     if (i < 0) return;
     const card = $("scene-" + i);
     card.scrollIntoView({ behavior: "smooth", block: "center" });

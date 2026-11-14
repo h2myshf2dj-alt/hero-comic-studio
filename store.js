@@ -36,7 +36,7 @@ const Store = {
       scenes.push({ text: "", bubble: "", bubbleType: "speech", bubblePos: i % 2 ? "tr" : "tl", img: null, variant: 0 });
     }
     return {
-      id: this.newId(), title: "", style: "retro95",
+      id: this.newId(), title: "", style: "retro95", count: 6,
       seed: Math.floor(Math.random() * 900000) + 1000,
       story: "", scenes, thumb: null, updated: Date.now()
     };
