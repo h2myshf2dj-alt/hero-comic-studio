@@ -1,5 +1,5 @@
 // Hero Comic Studio – Bedienung
-const APP_VERSION = "1.2";
+const APP_VERSION = "1.3";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -369,7 +369,17 @@ function init() {
     ]).then(draw).catch(() => {});
   }
 
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+  if ("serviceWorker" in navigator) {
+    const hadController = !!navigator.serviceWorker.controller;
+    let reloaded = false;
+    // Neue Version gefunden -> App einmal automatisch neu laden
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadController || reloaded || state.busy) return;
+      reloaded = true; location.reload();
+    });
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
+      .then(reg => reg.update()).catch(() => {});
+  }
 }
 
 init();
