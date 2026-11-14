@@ -1,4 +1,5 @@
 // Hero Comic Studio – Bedienung
+const APP_VERSION = "1.2";
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -331,6 +332,7 @@ function showView(id) {
 
 // ---------- Start ----------
 function init() {
+  $("version").textContent = "Version " + APP_VERSION;
   const sel = $("pageStyle");
   STYLES.forEach(s => { const o = document.createElement("option"); o.value = s.id; o.textContent = s.name; sel.appendChild(o); });
 
